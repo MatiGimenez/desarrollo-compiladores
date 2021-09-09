@@ -36,6 +36,7 @@ declaracion: {printf("INICIO DECLARACION\n");} tipo ID {printf("ID\n");} OP_ASIG
 lista_sentencias: sentencia
                 | lista_sentencias sentencia;
 
+// Modificar y agregar IF ternario EJ: id = IF(condicion_logica, expresion, expresion)
 sentencia: seleccion
           | seleccion ELSE LLAVE_ABRE lista_sentencias LLAVE_CIERRA
           | PUT ID
