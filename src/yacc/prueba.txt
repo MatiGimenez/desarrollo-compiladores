@@ -1,0 +1,7 @@
+DECLARE{
+INTEGER A = 10;
+STRING B;
+}
+IF(A<20){
+B="HOLA";
+}

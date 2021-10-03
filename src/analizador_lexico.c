@@ -8,17 +8,76 @@ FILE *yyin;
 
 //TOKENS
 #define QFIN 33
-#define NUMERAL 292
+#define OP_SUMA 257
+#define OP_MENOS 258
+#define OP_MUL 259
+#define OP_DIV 260
+#define OP_ASIG 261
+#define OP_IGUAL 262
+#define OP_MENOR 263
+#define OP_MAYOR 264
+#define OP_MAYOR_IGUAL 265
+#define OP_MENOR_IGUAL 266
+#define OP_DISTINTO 267
+#define OP_CONCATENAR 268
+#define PUNTO_Y_COMA 269
+#define COMA 270
+#define PARENT_ABRE 271
+#define PARENT_CIERRA 272
+#define LLAVE_ABRE 273
+#define LLAVE_CIERRA 274
+#define ID 275
+#define CTE_STRING 276
+#define CTE_ENTERO 277
+#define CTE_REAL 278
+#define NUMERAL 279
+//#define PUNTO 280
+
+//Palabras Reservadas
+#define IIF 299
+#define IF 300
+#define ELSE 301
+#define WHILE 302
+#define INTEGER 303
+#define FLOAT 304
+#define STRING 305
+#define PUT 306
+#define GET 307
+#define OR 308
+#define AND 309
+#define NOT 310
+#define DECLARE 311
 #define ERROR -1
+/****************************/
+
 
 /* Terminales */
+#define T_mas 0
+#define T_menos 1
+#define T_asterisco 2
+#define T_barra 3
+#define T_letra 4
+#define T_digito 5
+#define T_igual 6
+#define T_menor 7
+#define T_mayor 8
+#define T_comillas 9
+#define T_punto 10
+#define T_pyc 11
+#define T_CAR 12
+#define T_parentesis_abre 13
+#define T_parentesis_cierra 14
+#define T_coma 15
 #define T_tab 16
 #define T_espacio 17
 #define T_newline 18
 #define T_EOF 19
+#define T_llave_abre 20
+#define T_llave_cierra 21
+#define T_numeral 22
 /****************************/
 
-#define CANT_ESTADOS 27    //filas de la matriz de estados
+#define CANT_ESTADOS 26    //filas de la matriz de estados
 #define CANT_TERMINALES 23 //columnas de la matriz de estados
 #define CANTPR 13          //cantidad de palabras reservadas
 #define LARGOMAX 15        //largo maximo de las palabras reservadas
@@ -76,7 +135,7 @@ void op_concaten();
 void error();
 void nada();
 
-int yylex();
+
 char proximo_caracter();
 void get_elementos_esperados(char *);
 int get_evento(char);
@@ -87,62 +146,64 @@ void guardarTS();
 void guardarToken();
 
 int nuevo_estado[CANT_ESTADOS][CANT_TERMINALES] = {
-    6, 8, 9, 10, 1, 2, 4, 15, 13, 22, 3, 25, 0, 18, 19, 24, 0, 0, 0, QFIN, 20, 21, 0,
-    QFIN, QFIN, QFIN, QFIN, 1, 1, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, 2, QFIN, QFIN, QFIN, QFIN, 3, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, 26, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, 5, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    7, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, 11,
-    11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, QFIN, 11, 11, 12,
-    12, 12, 12, 0, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, QFIN, 12, 12, 12,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, 14, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, 16, QFIN, 17, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 22, 22, 22, 22, 22, 22, 22, 22, 22, QFIN, 22, 22, 22,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN,
-    QFIN, QFIN, QFIN, QFIN, QFIN, 26, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN, QFIN};
+    6,8,9,10,1,2,4,15,13,22,3,24,0,18,19,23,0,0,QFIN,20,21,-1,
+QFIN,QFIN,QFIN,QFIN,1,1,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,2,QFIN,QFIN,QFIN,QFIN,3,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+-1,-1,-1,-1,-1,25,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,5,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+7,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,11,
+11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,-1,11,11,12,
+11,11,11,0,11,11,11,11,11,11,11,11,11,11,11,11,11,11,-1,11,11,11,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,14,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,16,QFIN,17,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+22,22,22,22,22,22,22,22,22,QFIN,22,22,22,22,22,22,22,22,-1,22,22,22,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+QFIN,QFIN,QFIN,QFIN,QFIN,25,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,QFIN,
+
+    };
 
 void (*proceso[CANT_ESTADOS][CANT_TERMINALES])() = {
-    op_suma, op_menos, op_mul, op_div, inic_id, inic_entero, op_asig, op_menor, op_mayor, inic_string, inic_real, puntoycoma, error, par_abre, par_cierra, coma, nada, nada, salto_linea, nada, llave_abre, llave_cierra, error,
-    fin_id, fin_id, fin_id, fin_id, cont_id, cont_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id, fin_id,
-    fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, cont_entero, fin_entero, fin_entero, fin_entero, fin_entero, cont_real, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero, fin_entero,
-    error, error, error, error, error, cont_real, error, error, error, error, error, error, error, error, error, error, error, error, error, error, error, error, error,
-    nada, nada, nada, nada, nada, nada, op_igualdad, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    op_concaten, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, inic_com,
-    cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, salto_linea, error, cont_com, cont_com, cont_com,
-    cont_com, cont_com, cont_com, fin_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, cont_com, salto_linea, error, cont_com, cont_com, cont_com,
-    nada, nada, nada, nada, nada, nada, op_mayor_ig, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, op_menor_ig, nada, op_distinto, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada, nada,
-    fin_real, fin_real, fin_real, fin_real, fin_real, cont_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real, fin_real};
+    op_suma,op_menos,op_mul,op_div,inic_id,inic_entero,op_asig,op_menor,op_mayor,inic_string,inic_real,puntoycoma,nada,par_abre,par_cierra,coma,nada,nada,nada,llave_abre,llave_cierra,error,
+fin_id,fin_id,fin_id,fin_id,cont_id,cont_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,fin_id,
+fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,cont_entero,fin_entero,fin_entero,fin_entero,fin_entero,cont_real,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,fin_entero,
+error,error,error,error,error,cont_real,error,error,error,error,error,error,error,error,error,error,error,error,error,error,error,error,
+nada,nada,nada,nada,nada,nada,op_igualdad,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+op_concaten,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,inic_com,
+cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,error,cont_com,cont_com,cont_com,
+cont_com,cont_com,cont_com,fin_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,cont_com,error,cont_com,cont_com,cont_com,
+nada,nada,nada,nada,nada,nada,op_mayor_ig,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,op_menor_ig,nada,op_distinto,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,fin_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,cont_string,error,cont_string,cont_string,cont_string,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,nada,
+fin_real,fin_real,fin_real,fin_real,fin_real,cont_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,fin_real,
+
+   };
 
 /* TABLA DE SIMBOLOS */
 struct tablaDeSimbolos
@@ -166,6 +227,7 @@ char token[200]; //Nombre del token identificado
 char caracter;   //caracter que se lee del archivo
 const char palabrasRes[CANTPR][LARGOMAX] = {
     {"IF"},
+    {"IIF"},
     {"ELSE"},
     {"WHILE"},
     {"INTEGER"},
@@ -176,12 +238,14 @@ const char palabrasRes[CANTPR][LARGOMAX] = {
     {"OR"},
     {"AND"},
     {"NOT"},
-    {"DECLARE"}};
+    {"DECLARE"}
+    };
 
 const char *terminal[CANT_TERMINALES] = {"+", "-", "*", "/", "a-z A-Z", "0-9", "=", "<", ">", "\"", ".", ";", "caracter", "(", ")", ",", "tab", "espacio", "nueva linea", "EOF", "{", "}", "#"};
 
 int NroPalabrasRes[CANTPR] = {
     IF,
+    IIF,
     ELSE,
     WHILE,
     INTEGER,
@@ -192,7 +256,8 @@ int NroPalabrasRes[CANTPR] = {
     OR,
     AND,
     NOT,
-    DECLARE};
+    DECLARE
+    };
 
 int yylex()
 {
